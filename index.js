@@ -3,6 +3,11 @@ const libgen = require('libgen');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   next();
+});
+
 app.get('/', (req, res) => {
     res.send('You\'re pinging bookfinderapi.');
 });
