@@ -11,6 +11,9 @@ app.get('/search', async (req, res) => {
     const data = await libgen.search({
         mirror: 'http://libgen.is',
         query: req.query.q,
+        count: req.query.count ? req.query.count : 10,
+        column: req.query.column ? req.query.column : 'title',
+        page: req.query.page ? req.query.page : 1,
     })
     res.send(data);
 });
