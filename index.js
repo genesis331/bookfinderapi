@@ -23,8 +23,7 @@ app.get('/search', async (req, res) => {
         mirror: mirror,
         query: req.query.q,
         count: req.query.count ? req.query.count : 10,
-        column: isbnCheck ? 'identifier' : 'title',
-        page: req.query.page ? req.query.page : 1,
+        search_in: isbnCheck ? 'identifier' : 'title'
     })
     res.send(data);
 });
@@ -33,9 +32,8 @@ app.get('/detail', async (req, res) => {
     const data = await libgen.search({
         mirror: mirror,
         query: req.query.q,
-        count: 10,
-        column: 'md5',
-        page: 1,
+        count: 1,
+        search_in: 'md5'
     })
     res.send(data);
 });
