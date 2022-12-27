@@ -1,5 +1,6 @@
 const express = require('express');
 const libgen = require('libgen');
+const fs = require('fs');
 const cors = require("cors");
 const axios = require("axios");
 const app = express();
@@ -26,12 +27,16 @@ app.get('/search', async (req, res) => {
     res.send(data);
 });
 
+const outputPath = "./output.jpg";
 app.get('/imgproxy', async (req, res) => {
     axios.get(req.query.url, {
         responseType: 'arraybuffer'
     })
     .then(response => {
-        res.send(Buffer.from(response.data, 'base64'));
+        const buffer = Buffer.from(response.data, 'base64');
+        fs.writeFileSync(outputPath, buffer, { encoding: "base64" });
+        res.type('image/jpeg');
+        res.download(outputPath);
     })
     .catch(ex => {
         res.send(ex);
