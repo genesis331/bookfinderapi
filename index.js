@@ -16,14 +16,26 @@ app.get('/', (req, res) => {
     res.send('You\'re pinging bookfinderapi.');
 });
 
+const mirror = 'http://libgen.is';
 app.get('/search', async (req, res) => {
     const isbnCheck = (req.query.q).match(new RegExp('^[0-9]*$')) !== null;
     const data = await libgen.search({
-        mirror: 'http://libgen.is',
+        mirror: mirror,
         query: req.query.q,
         count: req.query.count ? req.query.count : 10,
         column: isbnCheck ? 'identifier' : 'title',
         page: req.query.page ? req.query.page : 1,
+    })
+    res.send(data);
+});
+
+app.get('/detail', async (req, res) => {
+    const data = await libgen.search({
+        mirror: mirror,
+        query: req.query.q,
+        count: 10,
+        column: 'md5',
+        page: 1,
     })
     res.send(data);
 });
