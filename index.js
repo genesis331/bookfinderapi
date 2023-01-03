@@ -4,8 +4,21 @@ const fs = require('fs');
 const cors = require("cors");
 const axios = require("axios");
 const app = express();
-app.use(cors());
 const port = process.env.PORT || 3000;
+
+const whitelist = require('./whitelist.json').whitelist;
+
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 
 app.use(function(req, res, next) {
    res.header("Access-Control-Allow-Origin", "*");
